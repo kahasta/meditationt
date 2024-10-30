@@ -13,7 +13,7 @@ const TimerView = ({ timer, index, onDelete }) => {
 
         {/* Время таймера */}
         <Text style={styles.timerText}>
-          {`${timer.hours.toString().padStart(2, '0')}:${timer.minutes.toString().padStart(2, '0')}:${timer.seconds.toString().padStart(2, '0')}`}
+          {`Таймер ${timer.hours.toString().padStart(2, '0')}:${timer.minutes.toString().padStart(2, '0')}:${timer.seconds.toString().padStart(2, '0')}`}
         </Text>
 
         {/* Кнопка удаления */}

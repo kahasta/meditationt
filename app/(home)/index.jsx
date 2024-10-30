@@ -5,10 +5,10 @@ import { FAB } from '@rneui/themed';
 import { TimerPickerModal } from "react-native-timer-picker";
 import TimerView from './components/timer_view';
 import TimerList from './components/timer_list';
+import TotalTimeView from './components/total_time_view';
 
 const Home = () => {
   const [showPicker, setShowPicker] = useState(false);
-  const [timer, setTimer] = useState({})
   const [timers, setTimerList] = useState([])
 
   const formatTime = ({
@@ -34,13 +34,15 @@ const Home = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar style='dark' />
       <TimerList timers={timers} setTimers={setTimerList} />
+      <TotalTimeView timers={timers} />
 
       <TimerPickerModal
         visible={showPicker}
         setIsVisible={setShowPicker}
         onConfirm={(pickedDuration) => {
-          setTimer(pickedDuration);
-          setTimerList((prev) => [...prev, pickedDuration])
+          if (pickedDuration.hours !== 0 || pickedDuration.minutes !== 0 || pickedDuration.seconds !== 0) {
+            setTimerList((prev) => [...prev, pickedDuration])
+          }
           setShowPicker(false);
         }}
         modalTitle="Set Alarm"
@@ -63,6 +65,14 @@ const Home = () => {
         size="small"
         placement='right'
       />
+      <FAB
+        style={styles.fab_start}
+        visible={true}
+        onPress={() => { }}
+        icon={{ name: 'play-arrow', color: 'white' }}
+        size="small"
+        placement='right'
+      />
     </SafeAreaView>
   )
 }
@@ -79,8 +89,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'absolute',
     marin: 20,
-    bottom: 16,
+    bottom: 46,
     right: 16,
+    alignItems: 'center',
+  },
+
+  fab_start: {
+    justifyContent: 'center',
+    position: 'absolute',
+    marin: 20,
+    bottom: 46,
+    right: 86,
     alignItems: 'center',
   }
 });
