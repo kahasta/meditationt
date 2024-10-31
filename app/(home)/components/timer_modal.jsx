@@ -6,6 +6,12 @@ const TimerModal = ({ timers, isPlay, onClose }) => {
   const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
   const [remainingTime, setRemainingTime] = useState(null);
 
+  // Сбрасываем состояние таймера при закрытии
+  const resetTimer = () => {
+    setCurrentTimerIndex(0);
+    setRemainingTime(null);
+  };
+
   useEffect(() => {
     if (isPlay && timers[currentTimerIndex]) {
       const { hours, minutes, seconds } = timers[currentTimerIndex];
@@ -21,6 +27,7 @@ const TimerModal = ({ timers, isPlay, onClose }) => {
         if (prevTime === 1) {
           clearInterval(interval);
           if (currentTimerIndex === timers.length - 1) {
+            resetTimer()
             setTimeout(onClose, 0);
           } else {
             setCurrentTimerIndex((prevIndex) => prevIndex + 1);
@@ -46,13 +53,19 @@ const TimerModal = ({ timers, isPlay, onClose }) => {
       animationType="slide"
       transparent={true}
       visible={isPlay}
-      onRequestClose={onClose}
+      onRequestClose={() => {
+        resetTimer();
+        onClose();
+      }}
     >
       <View style={styles.modalContainer}>
         <View style={styles.timerContainer}>
           <Text style={styles.timerTitle}>Current Timer {currentTimerIndex + 1}</Text>
           <Text style={styles.timerText}>{formatTime(remainingTime)}</Text>
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <TouchableOpacity onPress={() => {
+            resetTimer()
+            onClose()
+          }} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         </View>
