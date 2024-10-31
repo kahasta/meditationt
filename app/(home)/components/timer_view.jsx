@@ -5,7 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 const TimerView = ({ timer, index, onDelete }) => {
   console.log(timer)
-  if (timer.minutes) {
+  if (timer.hours || timer.minutes || timer.seconds) {
     return (
       <View style={styles.container}>
         {/* Номер таймера */}

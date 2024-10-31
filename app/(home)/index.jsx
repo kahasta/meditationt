@@ -1,15 +1,23 @@
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { FAB } from '@rneui/themed';
 import { TimerPickerModal } from "react-native-timer-picker";
-import TimerView from './components/timer_view';
 import TimerList from './components/timer_list';
 import TotalTimeView from './components/total_time_view';
+import TimerModal from './components/timer_modal';
 
 const Home = () => {
   const [showPicker, setShowPicker] = useState(false);
   const [timers, setTimerList] = useState([])
+  const [isPlay, setIsPlay] = useState(false)
+
+  // Следим за изменениями в массиве timers
+  useEffect(() => {
+    if (timers.length === 0 && isPlay) {
+      setIsPlay(false); // Останавливаем, если таймеров нет
+    }
+  }, [timers]);
 
   const formatTime = ({
     hours,
@@ -30,12 +38,42 @@ const Home = () => {
 
     return timeParts.join(":");
   };
+
+  // Сброс режима play, когда таймеры заканчиваются
+  const handleStop = () => {
+    setIsPlay(false);
+  };
+
+  // Условия для отображения FAB
+  const fabAdd = (
+    <FAB
+      style={styles.fab}
+      visible={!isPlay}
+      onPress={() => setShowPicker(true)}
+      icon={{ name: 'add', color: 'white' }}
+      size="small"
+    />
+  );
+
+  const fabPlayStop = (
+    <FAB
+      style={styles.fabStart}
+      visible={timers.length > 0}
+      onPress={() => setIsPlay(!isPlay)}
+      icon={{ name: isPlay ? 'stop' : 'play-arrow', color: 'white' }}
+      size="small"
+    />
+  );
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style='dark' />
       <TimerList timers={timers} setTimers={setTimerList} />
       <TotalTimeView timers={timers} />
-
+      <TimerModal
+        timers={timers}
+        isPlay={isPlay}
+        onClose={handleStop}
+      />
       <TimerPickerModal
         visible={showPicker}
         setIsVisible={setShowPicker}
@@ -57,22 +95,8 @@ const Home = () => {
           overlayOpacity: 0.2,
         }}
       />
-      <FAB
-        style={styles.fab}
-        visible={true}
-        onPress={() => setShowPicker(true)}
-        icon={{ name: 'add', color: 'white' }}
-        size="small"
-        placement='right'
-      />
-      <FAB
-        style={styles.fab_start}
-        visible={true}
-        onPress={() => { }}
-        icon={{ name: 'play-arrow', color: 'white' }}
-        size="small"
-        placement='right'
-      />
+      {fabAdd}
+      {fabPlayStop}
     </SafeAreaView>
   )
 }
@@ -88,19 +112,27 @@ const styles = StyleSheet.create({
   fab: {
     justifyContent: 'center',
     position: 'absolute',
-    marin: 20,
+    margin: 20,
     bottom: 46,
     right: 16,
     alignItems: 'center',
   },
-
-  fab_start: {
+  fabStart: {
     justifyContent: 'center',
     position: 'absolute',
-    marin: 20,
+    margin: 20,
     bottom: 46,
     right: 86,
     alignItems: 'center',
-  }
+  },
+  fab_start: {
+    justifyContent: 'center',
+    position: 'absolute',
+    margin: 20,
+    bottom: 46,
+    right: 86,
+    alignItems: 'center',
+  },
+
 });
 
