@@ -1,10 +1,41 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
+import * as Brightness from 'expo-brightness';
+import { Audio } from 'expo-av'
+
+const playSound = async (flag) => {
+  const timer_sound = await Audio.Sound.createAsync(require('../../../assets/sounds/tibetan-singing-bowl-struck.mp3'))
+  const timer_sound_end = await Audio.Sound.createAsync(require('../../../assets/sounds/tibetan-spell-chimes.mp3'))
+  if (flag) {
+    await timer_sound.sound.playAsync()
+  } else {
+    await timer_sound_end.sound.playAsync()
+  }
+}
 
 const TimerModal = ({ timers, isPlay, onClose }) => {
   const [currentTimerIndex, setCurrentTimerIndex] = useState(0);
   const [remainingTime, setRemainingTime] = useState(null);
+
+
+
+
+  if (isPlay) {
+    // Блокируем экран от отключения
+    activateKeepAwakeAsync();
+
+    // Устанавливаем минимальную яркость
+    const setBrightness = async () => {
+      await Brightness.setBrightnessAsync(0.1); // Яркость на уровне 10%
+    };
+    setBrightness();
+  } else {
+    // Очистка яркости и отмена блокировки экрана при размонтировании
+    deactivateKeepAwake();
+    Brightness.useSystemBrightnessAsync(); // Возвращаем системную яркость
+  }
 
   // Сбрасываем состояние таймера при закрытии
   const resetTimer = () => {
@@ -27,10 +58,12 @@ const TimerModal = ({ timers, isPlay, onClose }) => {
         if (prevTime === 1) {
           clearInterval(interval);
           if (currentTimerIndex === timers.length - 1) {
+            playSound(false)
             resetTimer()
             setTimeout(onClose, 0);
           } else {
             setCurrentTimerIndex((prevIndex) => prevIndex + 1);
+            playSound(true)
           }
           return 0;
         }
