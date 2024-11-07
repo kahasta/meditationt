@@ -1,11 +1,11 @@
-import { View, Text, StyleSheet, SafeAreaView } from 'react-native'
+import { StyleSheet, SafeAreaView } from 'react-native'
 import { React, useState, useEffect } from 'react'
-import { StatusBar } from 'expo-status-bar'
 import { FAB } from '@rneui/themed';
 import { TimerPickerModal } from "react-native-timer-picker";
 import TimerList from './components/timer_list';
 import TotalTimeView from './components/total_time_view';
 import TimerModal from './components/timer_modal';
+import { StatusBar } from 'react-native';
 
 const Home = () => {
   const [showPicker, setShowPicker] = useState(false);
@@ -66,7 +66,6 @@ const Home = () => {
   );
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style='dark' />
       <TimerList timers={timers} setTimers={setTimerList} />
       <TotalTimeView timers={timers} />
       <TimerModal
@@ -108,6 +107,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
+    backgroundColor: '#242c40'
   },
   fab: {
     justifyContent: 'center',

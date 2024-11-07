@@ -7,6 +7,10 @@
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "androidStatusBar":{
+      "backgroundColor":"#020201",
+      "translucent":true,
+    },
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -20,8 +24,10 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.kahasta.meditationt"
-    },
+      "package": "com.kahasta.meditationt",
+      "versionCode": 1,
+      "versionName": "1.0.0",
+      },
     "web": {
       "bundler": "metro",
       "output": "static",
