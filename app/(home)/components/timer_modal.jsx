@@ -7,7 +7,7 @@ import { Audio } from 'expo-av'
 
 const playSound = async (flag) => {
   const timer_sound = await Audio.Sound.createAsync(require('../../../assets/sounds/tibetan-singing-bowl-struck.mp3'))
-  const timer_sound_end = await Audio.Sound.createAsync(require('../../../assets/sounds/tibetan-spell-chimes.mp3'))
+  const timer_sound_end = await Audio.Sound.createAsync(require('../../../assets/sounds/tibetan-bowl-4.mp3'))
   if (flag) {
     await timer_sound.sound.playAsync()
   } else {
